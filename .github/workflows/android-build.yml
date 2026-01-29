@@ -3,7 +3,7 @@ name: Build Android APK
 on:
   push:
     branches: [ main, master ]
-  workflow_dispatch: # Allows manual trigger
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,14 +21,10 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - name: Install Dependencies
-        run: |
-          cd "dottrack_-题号日历"
-          npm install
+        run: npm install
 
       - name: Build Web Assets
-        run: |
-          cd "dottrack_-题号日历"
-          npm run build
+        run: npm run build
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -43,13 +39,11 @@ jobs:
         run: npm install -g @capacitor/cli
 
       - name: Sync Capacitor
-        run: |
-          cd "dottrack_-题号日历"
-          npx cap sync android
+        run: npx cap sync android
 
       - name: Build Android APK
         run: |
-          cd "dottrack_-题号日历/android"
+          cd android
           chmod +x gradlew
           ./gradlew assembleDebug
 
@@ -57,4 +51,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dottrack-app-debug
-          path: dottrack_-题号日历/android/app/build/outputs/apk/debug/app-debug.apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
